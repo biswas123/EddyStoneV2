@@ -42,6 +42,7 @@
 				beacons[beacon.address] = beacon;
 			},
 			function (error) {
+				evothings.eddystone.stopScan();
 				showMessage('Eddystone scan error: ' + error);
 				$('#initialDiv').show();
 			});
