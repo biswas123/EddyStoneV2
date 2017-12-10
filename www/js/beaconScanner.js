@@ -9,7 +9,7 @@
 	var timer = null;
 	var SCAN_STOP_TIME = 60 * 1000; //1 minute
 	var DISTANCE_LIMIT = 1; //1 metre(m)
-	
+
 	function onDeviceReady() {
 		// Start tracking beacons!
 		//setTimeout(startScan, 500);
@@ -92,7 +92,7 @@
 	}
 	function displayBeacons() {
 		var html = '';
-		if (!isEmpty(beacons)) {
+		if (!beacons.isEmpty()) {
 
 			var sortedList = getSortedBeaconListByDistance(beacons);
 
