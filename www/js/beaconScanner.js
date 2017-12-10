@@ -81,6 +81,7 @@
 				+ htmlBeaconTemperature(beacon)
 				+ htmlBeaconRSSI(beacon)
 				+ calculateAccuracy(beacon)
+				+ evothings.eddystone.calculateAccuracy(beacon.txPower, beacon.rssi)
 				+ '</p>';
 			html += htmlBeacon;
 
