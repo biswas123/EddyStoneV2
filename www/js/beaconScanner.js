@@ -81,6 +81,7 @@
 				+ htmlBeaconTemperature(beacon)
 				+ htmlBeaconRSSI(beacon)
 				+ htmlBeaconAccuracy(beacon)
+				+ htmlBeaconDistance(beacon)
 				+ '</p>';
 			html += htmlBeacon;
 
@@ -110,21 +111,14 @@
 		// protocol reports the value at 0 meters. 41dBm is the signal loss that
 		// occurs over 1 meter, so we subtract that from the reported txPower.
 
-		var ratio = rssi2 * 1.0 / (txPower2 - 41)
+		var ratio = rssi2 * 1.0 / (txPower2 - 41);
 
 		if (ratio < 1.0) {
-			var accuracy = Math.pow(ratio, 10);
-			alert(accuracy);
-			accuracy = accuracy.toFixed(2); 
-			alert(accuracy);
-			accuracy = accuracy * 100;			
-			alert(accuracy);
-			return accuracy; 
+			return Math.pow(ratio, 10);
 		}
 		else {
-			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111
-			accuracy = accuracy.toFixed(2); 
-			return accuracy * 100; 
+			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+			return accuracy;
 
 			//var finalq = rssi2 + txPower2
 
@@ -214,6 +208,14 @@
 		return beacon.rssi ?
 			'Accuracy: ' + calculateAccuracy(beacon) + '<br/>' : '';
 	}
+
+	function htmlBeaconDistance(beacon) {
+		var accuracy  = calculateAccuracy(beacon);
+		var distance = accuracy.toFixed(3) * 100;
+		return beacon.rssi ?
+			'Distance in metre(m): ' + distance + '<br/>' : '';
+	}
+
 	function uint8ArrayToString(uint8Array) {
 		function format(x) {
 			var hex = x.toString(16);
