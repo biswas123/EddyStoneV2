@@ -17,6 +17,8 @@
 		// Timer that refreshes the display every x seconds.
 		var x = 1;
 		timer = setInterval(updateBeaconList, 1000 * x);
+
+		$('#scanBtn').click(onScanBtnPress);
 	}
 	function onScanBtnPress() {
 		alert(1);
