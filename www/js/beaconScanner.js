@@ -88,38 +88,41 @@
 	}
 	function displayBeacons() {
 		var html = '';
-		var sortedList = getSortedBeaconListByDistance(beacons);
+		if (!isEmpty(beacons) {
+			var sortedList = getSortedBeaconListByDistance(beacons);
 
-		var timeNow = Date.now();
+			var timeNow = Date.now();
 
-		//	for (var i = 0; i < sortedList.length; ++i) {
-		var beacon = sortedList[0];  // first index has the minimum distance
-		var accuracy = calculateAccuracy(beacon);
-		var distance = accuracy.toFixed(3);
-		distance = distance * 100;
-		if (distance < 1) {
-			var htmlBeacon =
-				"<p>"
-				+ htmlBeaconName(beacon)
-				+ htmlBeaconURL(beacon)
-				+ htmlBeaconNID(beacon)
-				+ htmlBeaconBID(beacon)
-				+ htmlBeaconEID(beacon)
-				+ htmlBeaconVoltage(beacon)
-				+ htmlBeaconTemperature(beacon)
-				+ htmlBeaconRSSI(beacon)
-				+ htmlBeaconAccuracy(beacon)
-				+ htmlBeaconDistance(beacon)
-				+ "</p>";
-			html += htmlBeacon;
+			//	for (var i = 0; i < sortedList.length; ++i) {
+			var beacon = sortedList[0];  // first index has the minimum distance
+			var accuracy = calculateAccuracy(beacon);
+			var distance = accuracy.toFixed(3);
+			distance = distance * 100;
+			if (distance < 1) {
+				var htmlBeacon =
+					"<p>"
+					+ htmlBeaconName(beacon)
+					+ htmlBeaconURL(beacon)
+					+ htmlBeaconNID(beacon)
+					+ htmlBeaconBID(beacon)
+					+ htmlBeaconEID(beacon)
+					+ htmlBeaconVoltage(beacon)
+					+ htmlBeaconTemperature(beacon)
+					+ htmlBeaconRSSI(beacon)
+					+ htmlBeaconAccuracy(beacon)
+					+ htmlBeaconDistance(beacon)
+					+ "</p>";
+				html += htmlBeacon;
+			}
+
+			//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
+			//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
+			//	callWebservice(bUrl);
+
+			//	}
+			document.querySelector('#found-beacons').innerHTML = html;
 		}
 
-		//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
-		//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
-		//	callWebservice(bUrl);
-
-		//	}
-		document.querySelector('#found-beacons').innerHTML = html;
 	}
 
 	function calculateAccuracy(beacon) {
