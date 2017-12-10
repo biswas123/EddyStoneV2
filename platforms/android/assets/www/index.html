@@ -12,7 +12,12 @@
 		// Redirect console.log when running from Evothings Workbench.
 		if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
-
+	<!--
+	Including cordova.js will automatically include the JavaScript library
+	for Eddystone.
+	-->
+	<script src="cordova.js"></script>
+	<script src="js/beaconScanner.js" type="application/javascript"></script>
 	<style>
 		body {
 			font-family: sans-serif;
@@ -31,12 +36,12 @@
 			background: white;
 		}
 
-		.button {
+		button {
 			background-color: #4CAF50;
 			/* Green */
 			border: none;
 			color: white;
-			padding: 15px 32px;
+			padding: 10px 25px;
 			text-align: center;
 			text-decoration: none;
 			display: inline-block;
@@ -49,35 +54,23 @@
 
 	<img class="evo-image" src="./img/evothings_logo_large_white1.png" />
 
-	<h1>Eddystone Demo</h1>
+	<h1>iLink​ ​Add​ ​Beacon</h1>
 	<br />
-	<p id="message">Preparing...</p>
+	
+	<p id="message"></p>
 	<p id="requestState" style="color:blue;"></p>
-	<b>
-		<h3>iLink​ ​Add​ ​Beacon</h3>
-	</b>
+
 	<div id="initialDiv">
 		<p>
 			Place Beacon next to phone. Press ‘Start Scan':
 		</p>
-		<button id="scanBtn" value="Start Scan" onclick="onScanBtnPress()"></button>
+		<button id="scanBtn" value="Start Scan" >Start Scan</button>
 	</div>
 
-	<!-- 
-	iLink​ ​Add​ ​Beacon
-	Place Beacon next to phone. Press ‘Start Scan':
-	<p>
-		<u>Detected beacons:</u>
+	<p id="detected-beacons">
+		<b>Detected beacons within 1 metre(m) distance:</b>
 	</p>
-	<div id="found-beacons"></div> -->
-
-	<!--
-	Including cordova.js will automatically include the JavaScript library
-	for Eddystone.
-	-->
-	<script src="cordova.js"></script>
-	<script src="js/beaconScanner.js" type="application/javascript"></script>
-
+	<div id="found-beacons"></div>
 
 </body>
 

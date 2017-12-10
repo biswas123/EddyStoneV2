@@ -7,15 +7,30 @@
 	var beacons = {};
 	// Timer that displays list of beacons.
 	var timer = null;
+	var SCAN_STOP_TIME = 60 * 1000; //1 minute
+	var DISTANCE_LIMIT = 1; //1 metre(m)
+	
 	function onDeviceReady() {
 		// Start tracking beacons!
-		setTimeout(startScan, 500);
+		//setTimeout(startScan, 500);
 
-		setTimeout(updateBeaconList, 1000); // first call to udpate beacon list after 1 sec.
+		//setTimeout(updateBeaconList, 1000); // first call to udpate beacon list after 1 sec.
 
 		// Timer that refreshes the display every x seconds.
-		var x = 10;
-		timer = setInterval(updateBeaconList, 1000 * x);
+		//		var x = 1;
+		//	timer = setInterval(updateBeaconList, 1000 * x);
+		$('#detected-beacons').hide();
+		$('#scanBtn').click(onScanBtnPress);
+	}
+	function onScanBtnPress() {
+		startScan();
+		$('#initialDiv').hide();
+		setTimeout(function () {
+			updateBeaconList();
+			evothings.eddystone.stopScan();
+			$('#initialDiv').show();
+			showMessage("Scan stopped. Press Press 'Start Scan' to re-scan.");
+		}, SCAN_STOP_TIME);
 	}
 	function onBackButtonDown() {
 		evothings.eddystone.stopScan();
@@ -30,7 +45,9 @@
 				beacons[beacon.address] = beacon;
 			},
 			function (error) {
+				evothings.eddystone.stopScan();
 				showMessage('Eddystone scan error: ' + error);
+				$('#initialDiv').show();
 			});
 	}
 	// Map the RSSI value to a value between 1 and 100.
@@ -46,6 +63,16 @@
 		}
 		beaconList.sort(function (beacon1, beacon2) {
 			return mapBeaconRSSI(beacon1.rssi) < mapBeaconRSSI(beacon2.rssi);
+		});
+		return beaconList;
+	}
+	function getSortedBeaconListByDistance(beacons) {
+		var beaconList = [];
+		for (var key in beacons) {
+			beaconList.push(beacons[key]);
+		}
+		beaconList.sort(function (beacon1, beacon2) {
+			return calculateAccuracy(beacon1) < calculateAccuracy(beacon2);
 		});
 		return beaconList;
 	}
@@ -65,42 +92,47 @@
 	}
 	function displayBeacons() {
 		var html = '';
-		var sortedList = getSortedBeaconList(beacons);
+		if (!isEmpty(beacons)) {
 
-		var timeNow = Date.now();
-		for (var i = 0; i < sortedList.length; ++i) {
-			var beacon = sortedList[i];
-			var htmlBeacon =
-				'<p>'
-				+ htmlBeaconName(beacon)
-				+ htmlBeaconURL(beacon)
-				+ htmlBeaconNID(beacon)
-				+ htmlBeaconBID(beacon)
-				+ htmlBeaconEID(beacon)
-				+ htmlBeaconVoltage(beacon)
-				+ htmlBeaconTemperature(beacon)
-				+ htmlBeaconRSSI(beacon)
-				+ '</p>';
-			html += htmlBeacon
+			var sortedList = getSortedBeaconListByDistance(beacons);
 
-			var myBeaconNID = 'f7 82 6d a6 bc 5b 71 e0 89 3e'; //hardcoded
-			if (apiBeaconNID(beacon) && apiBeaconNID(beacon).trim().toLowerCase() == myBeaconNID) {
-				var bUrl = "http://beacon.homelink.solutions/3/?b=";
+			var timeNow = Date.now();
 
-				bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
-				//bUrl = bUrl + "&b=" + apiBeaconBID(beacon);
-
-				//bUrl = bUrl + "&v=" + apiBeaconVoltage(beacon);
-				//bUrl = bUrl + "&rs=" + apiBeaconRSSI(beacon);
-				//bUrl = bUrl + "&t=" + apiBeaconTxPower(beacon);
-				//bUrl = bUrl + "&nm=" + apiBeaconName(beacon);
-				//bUrl = bUrl + "&d=" + calculateAccuracy(beacon);
-
-				callWebservice(bUrl);
+			//	for (var i = 0; i < sortedList.length; ++i) {
+			var beacon = sortedList[0];  // first index has the minimum distance
+			var distance = calculateBeaconDistance(beacon);
+			if (distance < DISTANCE_LIMIT) {
+				$('#detected-beacons').show();
+				var htmlBeacon =
+					"<p>"
+					+ htmlBeaconName(beacon)
+					+ htmlBeaconURL(beacon)
+					+ htmlBeaconNID(beacon)
+					+ htmlBeaconBID(beacon)
+					+ htmlBeaconEID(beacon)
+					+ htmlBeaconVoltage(beacon)
+					+ htmlBeaconTemperature(beacon)
+					+ htmlBeaconRSSI(beacon)
+					+ htmlBeaconAccuracy(beacon)
+					+ "</p>";
+				html += htmlBeacon;
 			}
 
+			//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
+			//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
+			//	callWebservice(bUrl);
+
+			//	}
+			document.querySelector('#found-beacons').innerHTML = html;
 		}
-		document.querySelector('#found-beacons').innerHTML = html;
+
+	}
+
+	function calculateBeaconDistance(beacon) {
+		var accuracy = calculateAccuracy(beacon);
+		var distance = accuracy.toFixed(3);
+		distance = distance * 100;
+		return distance;
 	}
 
 	function calculateAccuracy(beacon) {
@@ -117,14 +149,14 @@
 		// protocol reports the value at 0 meters. 41dBm is the signal loss that
 		// occurs over 1 meter, so we subtract that from the reported txPower.
 
-		var ratio = rssi2 * 1.0 / (txPower2 - 41)
+		var ratio = rssi2 * 1.0 / (txPower2 - 41);
 
 		if (ratio < 1.0) {
-			return Math.pow(ratio, 10)
+			return Math.pow(ratio, 10);
 		}
 		else {
-			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111
-			return accuracy
+			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
+			return accuracy;
 
 			//var finalq = rssi2 + txPower2
 
@@ -210,6 +242,11 @@
 		return beacon.rssi ?
 			'RSSI: ' + beacon.rssi + '<br/>' : '';
 	}
+	function htmlBeaconAccuracy(beacon) {
+		return beacon.rssi ?
+			'Accuracy: ' + calculateAccuracy(beacon) + '<br/>' : '';
+	}
+
 	function uint8ArrayToString(uint8Array) {
 		function format(x) {
 			var hex = x.toString(16);

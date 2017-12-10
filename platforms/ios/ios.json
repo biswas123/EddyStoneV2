@@ -1,65 +1,65 @@
 {
-  "prepare_queue": {
-    "installed": [],
-    "uninstalled": []
-  },
-  "config_munge": {
-    "files": {
-      "config.xml": {
-        "parents": {
-          "/*": [
-            {
-              "xml": "<feature name=\"BLE\"><param name=\"ios-package\" value=\"EVOBLE\" /></feature>",
-              "count": 1
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"BLE\"><param name=\"ios-package\" value=\"EVOBLE\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "UIBackgroundModes": [
+                        {
+                            "xml": "<array><string>bluetooth-central</string></array>",
+                            "count": 1
+                        }
+                    ]
+                }
             }
-          ]
         }
-      },
-      "*-Info.plist": {
-        "parents": {
-          "UIBackgroundModes": [
-            {
-              "xml": "<array><string>bluetooth-central</string></array>",
-              "count": 1
-            }
-          ]
+    },
+    "installed_plugins": {
+        "cordova-plugin-ble": {
+            "PACKAGE_NAME": "com.khayargoli.eddystoneapp"
+        },
+        "cordova-plugin-eddystone": {
+            "PACKAGE_NAME": "com.khayargoli.eddystoneapp"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.khayargoli.eddystoneapp"
         }
-      }
-    }
-  },
-  "installed_plugins": {
-    "cordova-plugin-ble": {
-      "PACKAGE_NAME": "com.khayargoli.eddystoneapp"
     },
-    "cordova-plugin-eddystone": {
-      "PACKAGE_NAME": "com.khayargoli.eddystoneapp"
-    },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.khayargoli.eddystoneapp"
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "id": "cordova-plugin-ble.BLE",
+            "file": "plugins/cordova-plugin-ble/ble.js",
+            "pluginId": "cordova-plugin-ble",
+            "clobbers": [
+                "evothings.ble"
+            ]
+        },
+        {
+            "id": "cordova-plugin-eddystone.eddystoneplugin",
+            "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
+            "pluginId": "cordova-plugin-eddystone",
+            "clobbers": [
+                "evothings.eddystone"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-ble": "2.0.1",
+        "cordova-plugin-eddystone": "1.3.0",
+        "cordova-plugin-whitelist": "1.3.2"
     }
-  },
-  "dependent_plugins": {},
-  "modules": [
-    {
-      "id": "cordova-plugin-ble.BLE",
-      "file": "plugins/cordova-plugin-ble/ble.js",
-      "pluginId": "cordova-plugin-ble",
-      "clobbers": [
-        "evothings.ble"
-      ]
-    },
-    {
-      "id": "cordova-plugin-eddystone.eddystoneplugin",
-      "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
-      "pluginId": "cordova-plugin-eddystone",
-      "clobbers": [
-        "evothings.eddystone"
-      ]
-    }
-  ],
-  "plugin_metadata": {
-    "cordova-plugin-ble": "2.0.1",
-    "cordova-plugin-eddystone": "1.3.0",
-    "cordova-plugin-whitelist": "1.3.2"
-  }
 }
