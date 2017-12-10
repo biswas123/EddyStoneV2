@@ -27,6 +27,7 @@
 			updateBeaconList();
 			evothings.eddystone.stopScan();
 			$('#initialDiv').show();
+			showMessage("Scan stopped. Press Press 'Start Scan' to re-scan.");
 		}, SCAN_STOP_TIME);
 	}
 	function onBackButtonDown() {
