@@ -211,7 +211,8 @@
 
 	function htmlBeaconDistance(beacon) {
 		var accuracy  = calculateAccuracy(beacon);
-		var distance = accuracy.toFixed(3) * 100;
+		var distance = accuracy.toFixed(3);
+		distance = distance * 100;
 		return beacon.rssi ?
 			'Distance in metre(m): ' + distance + '<br/>' : '';
 	}
