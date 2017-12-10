@@ -30,6 +30,18 @@
 			height: auto;
 			background: white;
 		}
+
+		.button {
+			background-color: #4CAF50;
+			/* Green */
+			border: none;
+			color: white;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+		}
 	</style>
 </head>
 
@@ -41,8 +53,18 @@
 	<br />
 	<p id="message">Preparing...</p>
 	<p id="requestState" style="color:blue;"></p>
+	<b>
+		<h3>iLink​ ​Add​ ​Beacon</h3>
+	</b>
+	<div id="initialDiv">
+		<p>
+			Place Beacon next to phone. Press ‘Start Scan':
+		</p>
+		<button id="scanBtn" value="Start Scan" onclick="onScanBtnPress()"></button>
+	</div>
+
 	<p>
-		<u>Detected beacons:</u>
+		<u>Detected beacons within 1 metre(m) distance:</u>
 	</p>
 	<div id="found-beacons"></div>
 
@@ -52,7 +74,7 @@
 	-->
 	<script src="cordova.js"></script>
 	<script src="js/beaconScanner.js" type="application/javascript"></script>
-	
+
 
 </body>
 

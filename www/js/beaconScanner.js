@@ -7,15 +7,24 @@
 	var beacons = {};
 	// Timer that displays list of beacons.
 	var timer = null;
+	var SCAN_STOP_TIME = 60 * 1000; //1 minute
 	function onDeviceReady() {
 		// Start tracking beacons!
-		setTimeout(startScan, 500);
+		//setTimeout(startScan, 500);
 
-		setTimeout(updateBeaconList, 1000); // first call to udpate beacon list after 1 sec.
+		//setTimeout(updateBeaconList, 1000); // first call to udpate beacon list after 1 sec.
 
 		// Timer that refreshes the display every x seconds.
-		var x = 10;
+		var x = 1;
 		timer = setInterval(updateBeaconList, 1000 * x);
+	}
+	function onScanBtnPress() {
+		startScan();
+		$('#initialDiv').hide();
+		setTimeout(function () {
+			evothings.eddystone.stopScan();
+			$('#initialDiv').show();
+		}, SCAN_STOP_TIME);
 	}
 	function onBackButtonDown() {
 		evothings.eddystone.stopScan();
@@ -70,28 +79,29 @@
 		var timeNow = Date.now();
 		for (var i = 0; i < sortedList.length; ++i) {
 			var beacon = sortedList[i];
-			var htmlBeacon =
-				'<p>'
-				+ htmlBeaconName(beacon)
-				+ htmlBeaconURL(beacon)
-				+ htmlBeaconNID(beacon)
-				+ htmlBeaconBID(beacon)
-				+ htmlBeaconEID(beacon)
-				+ htmlBeaconVoltage(beacon)
-				+ htmlBeaconTemperature(beacon)
-				+ htmlBeaconRSSI(beacon)
-				+ htmlBeaconAccuracy(beacon)
-				+ htmlBeaconDistance(beacon)
-				+ '</p>';
-			html += htmlBeacon;
+			var accuracy = calculateAccuracy(beacon);
+			var distance = accuracy.toFixed(3);
+			distance = distance * 100;
+			if (distance < 1) {
+				var htmlBeacon =
+					"<p>"
+					+ htmlBeaconName(beacon)
+					+ htmlBeaconURL(beacon)
+					+ htmlBeaconNID(beacon)
+					+ htmlBeaconBID(beacon)
+					+ htmlBeaconEID(beacon)
+					+ htmlBeaconVoltage(beacon)
+					+ htmlBeaconTemperature(beacon)
+					+ htmlBeaconRSSI(beacon)
+					+ htmlBeaconAccuracy(beacon)
+					+ htmlBeaconDistance(beacon)
+					+ "</p>";
+				html += htmlBeacon;
+			}
 
 			//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
-
 			//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
-
-
 			//	callWebservice(bUrl);
-
 
 		}
 		document.querySelector('#found-beacons').innerHTML = html;
@@ -210,7 +220,7 @@
 	}
 
 	function htmlBeaconDistance(beacon) {
-		var accuracy  = calculateAccuracy(beacon);
+		var accuracy = calculateAccuracy(beacon);
 		var distance = accuracy.toFixed(3);
 		distance = distance * 100;
 		return beacon.rssi ?
