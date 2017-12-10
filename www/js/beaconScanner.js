@@ -8,6 +8,8 @@
 	// Timer that displays list of beacons.
 	var timer = null;
 	var SCAN_STOP_TIME = 60 * 1000; //1 minute
+	var DISTANCE_LIMIT = 1; //1 metre(m)
+	
 	function onDeviceReady() {
 		// Start tracking beacons!
 		//setTimeout(startScan, 500);
@@ -98,10 +100,8 @@
 
 			//	for (var i = 0; i < sortedList.length; ++i) {
 			var beacon = sortedList[0];  // first index has the minimum distance
-			var accuracy = calculateAccuracy(beacon);
-			var distance = accuracy.toFixed(3);
-			distance = distance * 100;
-			if (distance < 1) {
+			var distance = calculateBeaconDistance(beacon);
+			if (distance < DISTANCE_LIMIT) {
 				$('#detected-beacons').show();
 				var htmlBeacon =
 					"<p>"
@@ -114,7 +114,6 @@
 					+ htmlBeaconTemperature(beacon)
 					+ htmlBeaconRSSI(beacon)
 					+ htmlBeaconAccuracy(beacon)
-					+ htmlBeaconDistance(beacon)
 					+ "</p>";
 				html += htmlBeacon;
 			}
@@ -127,6 +126,13 @@
 			document.querySelector('#found-beacons').innerHTML = html;
 		}
 
+	}
+
+	function calculateBeaconDistance(beacon) {
+		var accuracy = calculateAccuracy(beacon);
+		var distance = accuracy.toFixed(3);
+		distance = distance * 100;
+		return distance;
 	}
 
 	function calculateAccuracy(beacon) {
@@ -239,14 +245,6 @@
 	function htmlBeaconAccuracy(beacon) {
 		return beacon.rssi ?
 			'Accuracy: ' + calculateAccuracy(beacon) + '<br/>' : '';
-	}
-
-	function htmlBeaconDistance(beacon) {
-		var accuracy = calculateAccuracy(beacon);
-		var distance = accuracy.toFixed(3);
-		distance = distance * 100;
-		return beacon.rssi ?
-			'Distance in metre(m): ' + distance + '<br/>' : '';
 	}
 
 	function uint8ArrayToString(uint8Array) {
