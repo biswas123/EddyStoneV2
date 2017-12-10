@@ -123,6 +123,7 @@
 					//+ htmlBeaconTemperature(beacon)
 					+ htmlBeaconRSSI(beacon)
 					+ htmlBeaconAccuracy(beacon)
+					+ '<button onclick="executePostRequest("'+ beacon +'")">Add Beacon</button>'
 					+ "</p>";
 				html += htmlBeacon;
 			}
@@ -135,6 +136,11 @@
 			document.querySelector('#found-beacons').innerHTML = html;
 		}
 
+	}
+
+	function executePostRequest(beacon) {
+		alert(beacon);
+		alert(htmlBeaconNID(beacon));
 	}
 
 	function calculateBeaconDistance(beacon) {
