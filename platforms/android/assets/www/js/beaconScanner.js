@@ -80,17 +80,17 @@
 				+ htmlBeaconVoltage(beacon)
 				+ htmlBeaconTemperature(beacon)
 				+ htmlBeaconRSSI(beacon)
-				+ calculateAccuracy(beacon)
+				+ htmlBeaconAccuracy(beacon)
 				+ '</p>';
 			html += htmlBeacon;
 
-		//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
+			//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
 
-		//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
-		
+			//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
 
-		//	callWebservice(bUrl);
-			
+
+			//	callWebservice(bUrl);
+
 
 		}
 		document.querySelector('#found-beacons').innerHTML = html;
@@ -117,7 +117,8 @@
 		}
 		else {
 			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111
-			return accuracy
+			accuracy = accuracy.toFixed(2); 
+			return accuracy * 100;
 
 			//var finalq = rssi2 + txPower2
 
@@ -202,6 +203,10 @@
 	function htmlBeaconRSSI(beacon) {
 		return beacon.rssi ?
 			'RSSI: ' + beacon.rssi + '<br/>' : '';
+	}
+	function htmlBeaconAccuracy(beacon) {
+		return beacon.rssi ?
+			'Accuracy: ' + calculateAccuracy(beacon) + '<br/>' : '';
 	}
 	function uint8ArrayToString(uint8Array) {
 		function format(x) {
