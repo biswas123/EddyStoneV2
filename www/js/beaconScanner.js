@@ -119,7 +119,7 @@
 		else {
 			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111
 			accuracy = accuracy.toFixed(2); 
-			return accuracy * 100;
+			return accuracy * 100; 
 
 			//var finalq = rssi2 + txPower2
 
