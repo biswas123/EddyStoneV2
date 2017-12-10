@@ -9,7 +9,7 @@
 	var timer = null;
 	var SCAN_STOP_TIME = 60 * 1000; //1 minute
 	var DISTANCE_LIMIT = 1; //1 metre(m)
-	
+
 	function onDeviceReady() {
 		// Start tracking beacons!
 		//setTimeout(startScan, 500);
@@ -19,17 +19,22 @@
 		// Timer that refreshes the display every x seconds.
 		//		var x = 1;
 		//	timer = setInterval(updateBeaconList, 1000 * x);
-		$('#detected-beacons').hide();
+		$('#addTitle').hide();
 		$('#scanBtn').click(onScanBtnPress);
 	}
 	function onScanBtnPress() {
+
+		$('#addTitle').hide();
+		$('#found-beacons').html('');
+
 		startScan();
 		$('#initialDiv').hide();
 		setTimeout(function () {
+			$('.loader').hide();
 			updateBeaconList();
 			evothings.eddystone.stopScan();
 			$('#initialDiv').show();
-			showMessage("Scan stopped. Press Press 'Start Scan' to re-scan.");
+			showMessage('Scan stopped.');
 		}, SCAN_STOP_TIME);
 	}
 	function onBackButtonDown() {
@@ -37,6 +42,8 @@
 		navigator.app.exitApp();
 	}
 	function startScan() {
+
+		$('.loader').show();
 		showMessage('Scan in progress...');
 		evothings.eddystone.startScan(
 			function (beacon) {
@@ -45,6 +52,7 @@
 				beacons[beacon.address] = beacon;
 			},
 			function (error) {
+				$('.loader').hide();
 				evothings.eddystone.stopScan();
 				showMessage('Eddystone scan error: ' + error);
 				$('#initialDiv').show();
@@ -92,7 +100,8 @@
 	}
 	function displayBeacons() {
 		var html = '';
-		if (!isEmpty(beacons)) {
+		
+		if (Object.keys(beacons).length > 0) {
 
 			var sortedList = getSortedBeaconListByDistance(beacons);
 
@@ -102,7 +111,7 @@
 			var beacon = sortedList[0];  // first index has the minimum distance
 			var distance = calculateBeaconDistance(beacon);
 			if (distance < DISTANCE_LIMIT) {
-				$('#detected-beacons').show();
+				$('#addTitle').show();
 				var htmlBeacon =
 					"<p>"
 					+ htmlBeaconName(beacon)

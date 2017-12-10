@@ -19,17 +19,22 @@
 		// Timer that refreshes the display every x seconds.
 		//		var x = 1;
 		//	timer = setInterval(updateBeaconList, 1000 * x);
-		$('#detected-beacons').hide();
+		$('#addTitle').hide();
 		$('#scanBtn').click(onScanBtnPress);
 	}
 	function onScanBtnPress() {
+
+		$('#addTitle').hide();
+		$('#found-beacons').html('');
+
 		startScan();
 		$('#initialDiv').hide();
 		setTimeout(function () {
+			$('.loader').hide();
 			updateBeaconList();
 			evothings.eddystone.stopScan();
 			$('#initialDiv').show();
-			showMessage("Scan stopped. Press Press 'Start Scan' to re-scan.");
+			showMessage('Scan stopped.');
 		}, SCAN_STOP_TIME);
 	}
 	function onBackButtonDown() {
@@ -37,6 +42,8 @@
 		navigator.app.exitApp();
 	}
 	function startScan() {
+
+		$('.loader').show();
 		showMessage('Scan in progress...');
 		evothings.eddystone.startScan(
 			function (beacon) {
@@ -45,6 +52,7 @@
 				beacons[beacon.address] = beacon;
 			},
 			function (error) {
+				$('.loader').hide();
 				evothings.eddystone.stopScan();
 				showMessage('Eddystone scan error: ' + error);
 				$('#initialDiv').show();
@@ -92,7 +100,8 @@
 	}
 	function displayBeacons() {
 		var html = '';
-		if (!beacons.isEmpty()) {
+		
+		if (Object.keys(beacons).length > 0) {
 
 			var sortedList = getSortedBeaconListByDistance(beacons);
 
@@ -102,16 +111,16 @@
 			var beacon = sortedList[0];  // first index has the minimum distance
 			var distance = calculateBeaconDistance(beacon);
 			if (distance < DISTANCE_LIMIT) {
-				$('#detected-beacons').show();
+				$('#addTitle').show();
 				var htmlBeacon =
 					"<p>"
 					+ htmlBeaconName(beacon)
-					+ htmlBeaconURL(beacon)
+					//+ htmlBeaconURL(beacon)
 					+ htmlBeaconNID(beacon)
 					+ htmlBeaconBID(beacon)
-					+ htmlBeaconEID(beacon)
-					+ htmlBeaconVoltage(beacon)
-					+ htmlBeaconTemperature(beacon)
+					//+ htmlBeaconEID(beacon)
+					//+ htmlBeaconVoltage(beacon)
+					//+ htmlBeaconTemperature(beacon)
 					+ htmlBeaconRSSI(beacon)
 					+ htmlBeaconAccuracy(beacon)
 					+ "</p>";
@@ -220,11 +229,11 @@
 	}
 	function htmlBeaconNID(beacon) {
 		return beacon.nid ?
-			'NID: ' + uint8ArrayToString(beacon.nid) + '<br/>' : '';
+			'Namespace ID: ' + uint8ArrayToString(beacon.nid) + '<br/>' : '';
 	}
 	function htmlBeaconBID(beacon) {
 		return beacon.bid ?
-			'BID: ' + uint8ArrayToString(beacon.bid) + '<br/>' : '';
+			'Instance ID: ' + uint8ArrayToString(beacon.bid) + '<br/>' : '';
 	}
 	function htmlBeaconEID(beacon) {
 		return beacon.eid ?
