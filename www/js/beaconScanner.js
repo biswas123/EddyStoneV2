@@ -19,6 +19,7 @@
 		timer = setInterval(updateBeaconList, 1000 * x);
 	}
 	function onScanBtnPress() {
+		alert(1);
 		startScan();
 		$('#initialDiv').hide();
 		setTimeout(function () {
