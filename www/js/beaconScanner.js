@@ -17,7 +17,7 @@
 		// Timer that refreshes the display every x seconds.
 		//		var x = 1;
 		//	timer = setInterval(updateBeaconList, 1000 * x);
-
+		$('#detected-beacons').hide();
 		$('#scanBtn').click(onScanBtnPress);
 	}
 	function onScanBtnPress() {
@@ -90,7 +90,8 @@
 	}
 	function displayBeacons() {
 		var html = '';
-		if (!isEmpty(beacons) {
+		if (!isEmpty(beacons)) {
+
 			var sortedList = getSortedBeaconListByDistance(beacons);
 
 			var timeNow = Date.now();
@@ -101,6 +102,7 @@
 			var distance = accuracy.toFixed(3);
 			distance = distance * 100;
 			if (distance < 1) {
+				$('#detected-beacons').show();
 				var htmlBeacon =
 					"<p>"
 					+ htmlBeaconName(beacon)
