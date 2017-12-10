@@ -114,8 +114,12 @@
 
 		if (ratio < 1.0) {
 			var accuracy = Math.pow(ratio, 10);
+			alert(accuracy);
 			accuracy = accuracy.toFixed(2); 
-			return accuracy * 100; 
+			alert(accuracy);
+			accuracy = accuracy * 100;			
+			alert(accuracy);
+			return accuracy; 
 		}
 		else {
 			var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111
