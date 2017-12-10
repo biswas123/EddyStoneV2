@@ -12,7 +12,12 @@
 		// Redirect console.log when running from Evothings Workbench.
 		if (window.hyper && window.hyper.log) { console.log = hyper.log }
 	</script>
-
+	<!--
+	Including cordova.js will automatically include the JavaScript library
+	for Eddystone.
+	-->
+	<script src="cordova.js"></script>
+	<script src="js/beaconScanner.js" type="application/javascript"></script>
 	<style>
 		body {
 			font-family: sans-serif;
@@ -36,7 +41,7 @@
 			/* Green */
 			border: none;
 			color: white;
-			padding: 15px 32px;
+			padding: 10px 25px;
 			text-align: center;
 			text-decoration: none;
 			display: inline-block;
@@ -67,14 +72,6 @@
 		<u>Detected beacons within 1 metre(m) distance:</u>
 	</p>
 	<div id="found-beacons"></div>
-
-	<!--
-	Including cordova.js will automatically include the JavaScript library
-	for Eddystone.
-	-->
-	<script src="cordova.js"></script>
-	<script src="js/beaconScanner.js" type="application/javascript"></script>
-
 
 </body>
 
