@@ -262,9 +262,14 @@ function executePostRequest(nid, iid) {
 
 		var url = "https://api.homelink.solutions/v1/addBeacon/index.asp?nid=" + nid + "&iid=" + iid;
 		$.get(url, function (data) {
-			showReqMessage("Beacon successfully added. NamespaceID: " + nid);
+			if (data && data.responseCode == '200') {
+				showReqMessage("Beacon successfully added. NamespaceID: " + nid);
+			} else {
+				showReqMessage("Error adding beacon. NamespaceID: " + nid);
+			}
+
 		}).fail(function () {
-			showReqMessage("Error :: executePostRequest(), please check your interenet connection.");
+			showReqMessage("Error :: fn:executePostRequest(), please check your interenet connection.");
 		});
 		$('#requestState').show();
 	}
