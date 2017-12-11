@@ -52,10 +52,10 @@
 			position: fixed;
 			left: 0px;
 			top: 0px;
-			width: 75%;
-			height: 75%;
+			width: 100%;
+			height: 100%;
 			z-index: 9999;
-			background: url('img/Radio.gif') 50% 50% no-repeat; 
+			background: url('img/Radio.gif') 50% 50% no-repeat;
 		}
 	</style>
 </head>
@@ -67,8 +67,9 @@
 	<h1>iLink​ ​Add​ ​Beacon</h1>
 	<br />
 
-	<b>Status: </b><p id="message"></p>
-	<p id="requestState" style="color:blue;"></p>
+	<b>Status: </b>
+	<p id="message" style="color:blue;"></p>
+	<p id="requestState" style="color:red;border: 2px solid black; padding: 5px; display:none;"></p>
 
 	<div id="initialDiv">
 		<p>
@@ -77,16 +78,19 @@
 		<button id="scanBtn" value="Start Scan">Start Scan</button>
 	</div>
 	<br />
-	<div id="addTitle">
-		<b>
-			<h3>Add beacon</h3>
-		</b>
-		<p>We located the following Beacon:</p>
-	</div>
-	<div id="found-beacons"></div>
+	<div id="beaconInfo" style="border:2px solid black; padding:5px 10px;display:none";">
+		<div id="addTitle">
+			<b>
+				Add beacon
+			</b>
+			<p>We located the following Beacon:</p>
+		</div>
 
-	<div class="loader" style="display:none";></div>
-	
+		<div id="found-beacons"></div>
+
+	</div>
+
+	<div class="loader" style="display:none" ;></div>
 </body>
 
 </html>
