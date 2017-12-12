@@ -256,12 +256,13 @@ function showReqMessage(text) {
 function executePostRequest(nid, iid) {
 	if (nid && iid) {
 		showReqMessage("Posting data...")
-
+		$('.loader').show();
 		var nid = decodeURIComponent(nid.trim().replace(/\s/g, ''));
 		var bid = decodeURIComponent(iid.trim().replace(/\s/g, ''));
 
 		var url = "https://api.homelink.solutions/v1/addBeacon/index.asp?nid=" + nid + "&iid=" + iid;
 		$.get(url, function (data) {
+			$('.loader').hide();
 			if (data && data.responseCode == '200') {
 				showReqMessage("Beacon successfully added. NamespaceID: " + nid);
 			} else {
@@ -270,6 +271,7 @@ function executePostRequest(nid, iid) {
 
 		}).fail(function () {
 			showReqMessage("Error :: fn:executePostRequest(), please check your interenet connection.");
+			$('.loader').hide();
 		});
 		$('#requestState').show();
 	}
