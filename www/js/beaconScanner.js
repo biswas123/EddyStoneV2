@@ -1,5 +1,5 @@
 var beacons = {};  // Dictionary of beacons.
-var SCAN_STOP_TIME = 10 * 1000; // 1 minute
+var SCAN_STOP_TIME = 60 * 1000; // 1 minute
 var DISTANCE_LIMIT = 1; // 1 metre(m)
 
 // This calls onDeviceReady when Cordova has loaded everything.
