@@ -1,9 +1,4 @@
-jQuery.ajaxSetup({ async: false });
-
-// Dictionary of beacons.
-var beacons = {};
-// Timer that displays list of beacons.
-var timer = null;
+var beacons = {};  // Dictionary of beacons.
 var SCAN_STOP_TIME = 10 * 1000; // 1 minute
 var DISTANCE_LIMIT = 1; // 1 metre(m)
 
@@ -13,14 +8,6 @@ document.addEventListener('deviceready', onDeviceReady, false);
 document.addEventListener('backbutton', onBackButtonDown, false);
 
 function onDeviceReady() {
-	// Start tracking beacons!
-	//setTimeout(startScan, 500);
-
-	//setTimeout(updateBeaconList, 1000); // first call to udpate beacon list after 1 sec.
-
-	// Timer that refreshes the display every x seconds.
-	//		var x = 1;
-	//	timer = setInterval(updateBeaconList, 1000 * x);
 
 	$('#scanBtn').click(onScanBtnPress);
 
@@ -39,7 +26,7 @@ function onScanBtnPress() {
 		$('#initialDiv').show();
 
 		showMessage('Scan stopped.');
-		if(Object.keys(beacons).length == 0){
+		if (Object.keys(beacons).length == 0) {
 			showMessage('No beacons found.');
 		}
 	}, SCAN_STOP_TIME);
@@ -116,38 +103,28 @@ function displayBeacons() {
 
 		var timeNow = Date.now();
 
-		//	for (var i = 0; i < sortedList.length; ++i) {
 		var beacon = sortedList[0];  // first index has the minimum distance.
 		var distance = calculateBeaconDistance(beacon);
 		var nid = uint8ArrayToString(beacon.nid) || null;
-		var bid = uint8ArrayToString(beacon.bid) || null;
+		var iid = uint8ArrayToString(beacon.bid) || null;
 
 		if (distance < DISTANCE_LIMIT) {
 			$('#beaconInfo').show();
 			var htmlBeacon =
 				"<p>"
 				+ htmlBeaconName(beacon)
-				//+ htmlBeaconURL(beacon)
 				+ htmlBeaconNID(beacon)
 				+ htmlBeaconBID(beacon)
-				//+ htmlBeaconEID(beacon)
-				//+ htmlBeaconVoltage(beacon)
-				//+ htmlBeaconTemperature(beacon)
 				+ htmlBeaconRSSI(beacon)
 				+ htmlBeaconAccuracy(beacon)
 				+ "<br/>"
-				+ "<button onclick=\"executePostRequest('" + nid + "','" + bid + "')\">Add Beacon</button>"
+				+ "<button onclick=\"executePostRequest('" + nid + "','" + iid + "')\">Add Beacon</button>"
 				+ "</p>";
 			html += htmlBeacon;
 		}
 
-		//	var bUrl = "http://beacon.homelink.solutions/3/?b=";
-		//	bUrl = bUrl + decodeURIComponent(apiBeaconNID(beacon).trim());
-		//	callWebservice(bUrl);
-
-		//	}
 		$('#found-beacons').append(html);
-	} 
+	}
 
 }
 
@@ -268,25 +245,40 @@ function uint8ArrayToString(uint8Array) {
 	return result;
 }
 function showMessage(text) {
-	document.querySelector('#message').innerHTML = text;
+	$('#message').text(text);
 }
 
 function showReqMessage(text) {
-	document.querySelector('#requestState').innerHTML = text;
+	$('#requestState').text(text);
 }
 
-function executePostRequest(nid, bid) {
-	if (nid && bid) {
+function executePostRequest(nid, iid) {
+	if (nid && iid) {
 		showReqMessage("Posting data...")
-
+		$('.loader').show();
 		var nid = decodeURIComponent(nid.trim().replace(/\s/g, ''));
-		var bid = decodeURIComponent(bid.trim().replace(/\s/g, ''));
-	
-		var url = "http://api.homelink.solutions/v1/addBeacon/?nid=" + nid + "&iid=" + bid;
-		$.get(url, function (data) {
-			showReqMessage("Beacon successfully added. NamespaceID: " + nid);
-		}).fail(function () {
-			showReqMessage("Error :: executePostRequest(), please check your interenet connection.");
+		var bid = decodeURIComponent(iid.trim().replace(/\s/g, ''));
+
+		var url = "https://api.homelink.solutions/v1/addBeacon/index.asp?nid=" + nid + "&iid=" + iid;
+
+		$.ajax({
+			url: url,
+			type: 'GET',
+			async: true,
+			error: function () {
+				showReqMessage("Error :: fn:executePostRequest(), please check your interenet connection.");
+				$('.loader').hide();
+				
+				
+			},
+			success: function (data) {
+				$('.loader').hide();
+				if (data && data.responseCode == '200') {
+					showReqMessage("Beacon successfully added. NamespaceID: " + nid);
+				} else {
+					showReqMessage("Error adding beacon. NamespaceID: " + nid);
+				}
+			}
 		});
 		$('#requestState').show();
 	}

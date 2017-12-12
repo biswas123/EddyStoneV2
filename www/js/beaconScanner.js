@@ -1,4 +1,3 @@
-jQuery.ajaxSetup({ async: false });
 var beacons = {};  // Dictionary of beacons.
 var SCAN_STOP_TIME = 10 * 1000; // 1 minute
 var DISTANCE_LIMIT = 1; // 1 metre(m)
@@ -246,11 +245,11 @@ function uint8ArrayToString(uint8Array) {
 	return result;
 }
 function showMessage(text) {
-	document.querySelector('#message').innerHTML = text;
+	$('#message').text(text);
 }
 
 function showReqMessage(text) {
-	document.querySelector('#requestState').innerHTML = text;
+	$('#requestState').text(text);
 }
 
 function executePostRequest(nid, iid) {
@@ -261,17 +260,25 @@ function executePostRequest(nid, iid) {
 		var bid = decodeURIComponent(iid.trim().replace(/\s/g, ''));
 
 		var url = "https://api.homelink.solutions/v1/addBeacon/index.asp?nid=" + nid + "&iid=" + iid;
-		$.get(url, function (data) {
-			$('.loader').hide();
-			if (data && data.responseCode == '200') {
-				showReqMessage("Beacon successfully added. NamespaceID: " + nid);
-			} else {
-				showReqMessage("Error adding beacon. NamespaceID: " + nid);
-			}
 
-		}).fail(function () {
-			showReqMessage("Error :: fn:executePostRequest(), please check your interenet connection.");
-			$('.loader').hide();
+		$.ajax({
+			url: url,
+			type: 'GET',
+			async: true,
+			error: function () {
+				showReqMessage("Error :: fn:executePostRequest(), please check your interenet connection.");
+				$('.loader').hide();
+				
+				
+			},
+			success: function (data) {
+				$('.loader').hide();
+				if (data && data.responseCode == '200') {
+					showReqMessage("Beacon successfully added. NamespaceID: " + nid);
+				} else {
+					showReqMessage("Error adding beacon. NamespaceID: " + nid);
+				}
+			}
 		});
 		$('#requestState').show();
 	}
