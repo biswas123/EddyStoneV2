@@ -98,13 +98,11 @@ function displayBeacons() {
 	var html = '';
 
 	if (Object.keys(beacons).length > 0) {
-
 		var sortedList = getSortedBeaconListByDistance(beacons);
-
 		var timeNow = Date.now();
 
 		var beacon = sortedList[0];  // first index has the minimum distance.
-		var distance = calculateBeaconDistance(beacon);
+		var distance = calculateAccuracy(beacon);
 		var nid = uint8ArrayToString(beacon.nid) || null;
 		var iid = uint8ArrayToString(beacon.bid) || null;
 
@@ -126,13 +124,6 @@ function displayBeacons() {
 		$('#found-beacons').append(html);
 	}
 
-}
-
-function calculateBeaconDistance(beacon) {
-	var accuracy = calculateAccuracy(beacon);
-	var distance = accuracy.toFixed(3);
-	distance = distance * 100;
-	return distance;
 }
 
 function calculateAccuracy(beacon) {
@@ -230,7 +221,7 @@ function htmlBeaconRSSI(beacon) {
 }
 function htmlBeaconAccuracy(beacon) {
 	return beacon.rssi ?
-		'Accuracy: ' + calculateAccuracy(beacon) + '<br/>' : '';
+		'Distance: ' + calculateAccuracy(beacon) + '<br/>' : '';
 }
 
 function uint8ArrayToString(uint8Array) {
