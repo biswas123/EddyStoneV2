@@ -16,8 +16,7 @@
 	Including cordova.js will automatically include the JavaScript library
 	for Eddystone.
 	-->
-	<script src="cordova.js"></script>
-	<script src="js/beaconScanner.js" type="application/javascript"></script>
+
 	<style>
 		body {
 			font-family: sans-serif;
@@ -30,8 +29,8 @@
 		.evo-image {
 			position: fixed;
 			right: 5px;
-			top: 5px;
-			width: 100px;
+			top: 14px;
+			width: 180px;
 			height: auto;
 			background: white;
 		}
@@ -50,26 +49,45 @@
 
 		.loader {
 			position: fixed;
-			left: 0px; 
+			left: 0px;
 			top: 0px;
 			width: 100%;
 			height: 100%;
-			z-index: 9999;
+			z-index: -1;
 			background: url('img/loading.svg') 50% 50% no-repeat;
+		}
+
+		#requestState {
+			color: red;
+			border: 2px solid black;
+			padding: 5px;
+			display: none;
+		}
+
+		#beaconInfo {
+			border: 2px solid black;
+			padding: 5px 10px;
+			display: none;
 		}
 	</style>
 </head>
 
 <body>
 
-	<img class="evo-image" src="./img/evothings_logo_large_white1.png" />
+	<img class="evo-image" src="./img/iLink.jpg" />
 
-	<h1>iLink​ ​Add​ ​Beacon</h1>
+	<h2 style="margin-top: 25px;">iLink​ ​Add​ ​Beacon</h2>
 	<br />
 
-	<b>Status: </b>
+	<b>
+		<u>Status: </u>
+	</b>
 	<p id="message" style="color:blue;"></p>
-	<p id="requestState" style="color:red;border: 2px solid black; padding: 5px; display:none;"></p>
+	<p>
+		No. of Beacons (< 1M): <b><span id="beaconCount"></span></b>
+	</p>
+
+	<p id="requestState"></p>
 
 	<div id="initialDiv">
 		<p>
@@ -78,10 +96,14 @@
 		<button id="scanBtn" value="Start Scan">Start Scan</button>
 	</div>
 	<br />
-	<div id="beaconInfo" style="border:2px solid black; padding:5px 10px;display:none";">
+	<div>
+		<button id="stopBtn" value="Stop Scan" style="display:none;">Stop Scan</button>
+	</div>
+	<br />
+	<div id="beaconInfo">
 		<div id="addTitle">
 			<b>
-				Add beacon
+				Add Beacon
 			</b>
 			<p>We located the following Beacon:</p>
 		</div>
@@ -92,5 +114,7 @@
 
 	<div class="loader" style="display:none" ;></div>
 </body>
+<script src="cordova.js"></script>
+<script src="js/beaconScanner.js" type="application/javascript"></script>
 
 </html>
