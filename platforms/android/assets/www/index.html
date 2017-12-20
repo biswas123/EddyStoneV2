@@ -78,19 +78,6 @@
 
 	<h3 style="margin-top: 25px;">iLink​ ​Add​ ​Beacon</h3>
 	<br />
-
-<!-- 	<b>
-		<u>Status: </u>
-	</b>
-	<p id="message" style="color:blue;"></p>
-	<p>
-		No. of Beacons: <b><span id="beaconCount"></span></b>
-	</p> -->
-	<p id="message" style="color:black;"></p>
-	<b><p id="successRequestState" style="color:blue"></p></b>
-	<b><p id="errorRequestState" style="color:red"></p></b>	
-	<p id="response"></p>
-
 	<div id="initialDiv">
 		<p>
 			Place Beacon next to phone. Press ‘Start Scan':
@@ -101,7 +88,12 @@
 	<div>
 		<button id="stopBtn" value="Stop Scan" style="display:none;">Stop Scan</button>
 	</div>
-	<br />
+	
+	<p id="message" style="color:black;"></p>
+	<b><p id="successRequestState" style="color:blue"></p></b>
+	<b><p id="errorRequestState" style="color:red"></p></b>	
+	<p id="response"></p>
+	<br/>
 	<div id="beaconInfo">
 		<div id="addTitle">
 			<b>
@@ -114,7 +106,7 @@
 
 	</div>
 
-	<div class="loader" style="display:none" ;></div>
+	<div class="loader" style="display:none"></div>
 </body>
 <script src="cordova.js"></script>
 <script src="js/beaconScanner.js" type="application/javascript"></script>

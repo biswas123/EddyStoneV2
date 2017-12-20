@@ -30,8 +30,7 @@ function onDeviceReady() {
 	$('#beaconCount').text(beaconsCount);
 } */
 
-function onScanBtnPress() {
-	refreshInterval = setInterval(refreshCount, REFRESH_INTERVAL_TIME);
+function onScanBtnPress() {	
 	$('#beaconInfo').hide();
 	$('#found-beacons').html('');
 
@@ -64,6 +63,7 @@ function onBackButtonDown() {
 }
 
 function startScan() {
+	showMessage('');
 	$('#stopBtn').show();
 	$('.loader').show();
 	$('#successRequestState').hide();
