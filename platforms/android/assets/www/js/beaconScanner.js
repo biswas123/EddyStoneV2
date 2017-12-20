@@ -1,11 +1,8 @@
 var beacons = {};  // Dictionary of beacons.
 var SCAN_STOP_TIME = 60 * 1000; // 1 minute
-//var DISTANCE_LIMIT = 1; // 1 metre(m)
-var beaconsCount = 0;
-var refreshInterval;
 var stopTimeout;
 
-var REFRESH_INTERVAL_TIME = 1000; //1 second
+
 
 // This calls onDeviceReady when Cordova has loaded everything.
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -19,7 +16,7 @@ function onDeviceReady() {
 
 }
 
-function refreshCount() {
+/* function refreshCount() {
 	removeOldBeacons();
 	beaconsCount = 0;
 	var beaconDistance;
@@ -31,7 +28,7 @@ function refreshCount() {
 	}
 
 	$('#beaconCount').text(beaconsCount);
-}
+} */
 
 function onScanBtnPress() {
 	refreshInterval = setInterval(refreshCount, REFRESH_INTERVAL_TIME);
@@ -49,17 +46,14 @@ function onStopBtnPress() {
 
 function stopScan() {
 	evothings.eddystone.stopScan();
-	displayBeacons();
-
-	clearInterval(refreshInterval);
+	displayBeacons();	
 	clearTimeout(stopTimeout);
 
 	$('#initialDiv').show();
 	$('#stopBtn').hide();
 	$('.loader').hide();
 
-	if (beaconsCount == 0) {
-		$('#beaconCount').text('0');
+	if (Object.keys(beacons).length == 0) {		
 		showMessage('No beacons found.');
 	}
 }
@@ -68,13 +62,14 @@ function onBackButtonDown() {
 	evothings.eddystone.stopScan();
 	navigator.app.exitApp();
 }
+
 function startScan() {
 	$('#stopBtn').show();
 	$('.loader').show();
-	$('#requestState').hide();
-
-	showMessage('Scan in progress...');
-
+	$('#successRequestState').hide();
+	$('#errorRequestState').hide();
+    $('#response').hide();
+	
 	evothings.eddystone.startScan(
 		function (beacon) {
 			// Update beacon data.
@@ -254,13 +249,17 @@ function showMessage(text) {
 	$('#message').text(text);
 }
 
-function showReqMessage(text) {
-	$('#requestState').text(text);
+function showSuccessReqMessage(text) {
+	$('#successRequestState').text(text).show();
+}
+
+function showErrorReqMessage(text) {
+	$('#errorRequestState').text(text).show();
 }
 
 function executePostRequest(nid, iid) {
 	if (nid && iid) {
-		showReqMessage("Posting data...")
+		
 		$('.loader').show();
 		var nid = decodeURIComponent(nid.trim().replace(/\s/g, ''));
 		var bid = decodeURIComponent(iid.trim().replace(/\s/g, ''));
@@ -272,21 +271,23 @@ function executePostRequest(nid, iid) {
 			type: 'GET',
 			async: true,
 			error: function () {
-				showReqMessage("Error :: fn:executePostRequest(), please check your interenet connection.");
+				showErrorReqMessage("Error, Please check your internet connection.");
 				$('.loader').hide();
-
-
 			},
 			success: function (data) {
 				$('.loader').hide();
 				if (data && data.responseCode == '200') {
-					showReqMessage("Beacon successfully added. NamespaceID: " + nid);
+					showSuccessReqMessage("Success");
+					$('#response').text(data.message);
+					
 				} else {
-					showReqMessage("Error adding beacon. NamespaceID: " + nid);
+					showErrorReqMessage("Error");
+					$('#response').text(data.message);
 				}
 			}
 		});
-		$('#requestState').show();
+		
+		$('#response').show();
 	}
 
 }
