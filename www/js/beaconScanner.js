@@ -1,6 +1,6 @@
 var beacons = {};  // Dictionary of beacons.
 var SCAN_STOP_TIME = 60 * 1000; // 1 minute
-var DISTANCE_LIMIT = 1; // 1 metre(m)
+//var DISTANCE_LIMIT = 1; // 1 metre(m)
 var beaconsCount = 0;
 var refreshInterval;
 var stopTimeout;
@@ -25,9 +25,9 @@ function refreshCount() {
 	var beaconDistance;
 	for (beacon in beacons) {
 		beaconDistance = calculateAccuracy(beacons[beacon].rssi, beacons[beacon].txPower);
-		if (beaconDistance < DISTANCE_LIMIT) {
+		//if (beaconDistance < DISTANCE_LIMIT) {
 			beaconsCount++;
-		}
+		//}
 	}
 
 	$('#beaconCount').text(beaconsCount);
@@ -123,7 +123,7 @@ function displayBeacons() {
 		var nid = uint8ArrayToString(beacon.nid) || null;
 		var iid = uint8ArrayToString(beacon.bid) || null;
 
-		if (distance < DISTANCE_LIMIT) {
+		//if (distance < DISTANCE_LIMIT) {
 			$('#beaconInfo').show();
 			var htmlBeacon =
 				"<p>"
@@ -136,7 +136,7 @@ function displayBeacons() {
 				+ "<button onclick=\"executePostRequest('" + nid + "','" + iid + "')\">Add Beacon</button>"
 				+ "</p>";
 			html += htmlBeacon;
-		}
+		//}
 
 		$('#found-beacons').append(html);
 	}
