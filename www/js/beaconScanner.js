@@ -291,7 +291,7 @@ function executePostRequest(nid, iid) {
 		});
 		
 		$('#response').show();
-		$('#requestState').show();
+		
 	}
 
 }
