@@ -250,10 +250,12 @@ function showMessage(text) {
 }
 
 function showSuccessReqMessage(text) {
+	$('#errorRequestState').text('');
 	$('#successRequestState').text(text).show();
 }
 
 function showErrorReqMessage(text) {
+	$('#successRequestState').text('');
 	$('#errorRequestState').text(text).show();
 }
 
