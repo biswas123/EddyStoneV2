@@ -249,18 +249,19 @@ function showMessage(text) {
 	$('#message').text(text);
 }
 
-function showSuccessReqMessage(text) {
-	$('#errorRequestState').text('');
+function showSuccessReqMessage(text) {	
 	$('#successRequestState').text(text).show();
 }
 
-function showErrorReqMessage(text) {
-	$('#successRequestState').text('');
+function showErrorReqMessage(text) {	
 	$('#errorRequestState').text(text).show();
 }
 
 function executePostRequest(nid, iid) {
 	if (nid && iid) {
+		$('#errorRequestState').text('');
+		$('#successRequestState').text('');
+		$('#response').text('');
 		
 		$('.loader').show();
 		var nid = decodeURIComponent(nid.trim().replace(/\s/g, ''));
@@ -290,6 +291,7 @@ function executePostRequest(nid, iid) {
 		});
 		
 		$('#response').show();
+		$('#requestState').show();
 	}
 
 }
